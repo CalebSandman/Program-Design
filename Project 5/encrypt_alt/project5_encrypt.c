@@ -10,21 +10,23 @@
 
 //function prototypes
 int read_line(char* str, int n);
-void encrypt(char* str, int length, int* date);
+void encrypt(char* message, char* encrypted_message, int* date, int n);
 
-#define STR_LENGTH 1000 //max message length
+#define MAX_LENGTH 1000 //max message length
 
 int main()
 {
     //variable declarations
-    char msg[STR_LENGTH + 1];
+    char msg[MAX_LENGTH + 1];
+    char enc_msg[MAX_LENGTH + 1];
     int num_characters;
     int date[8];
     int* p;
 
     //msg[] holds the inputted text and num_characters holds the number of characters
     printf("Enter the message: ");
-    num_characters = read_line(msg, STR_LENGTH);
+    num_characters = read_line(msg, MAX_LENGTH);
+    enc_msg[num_characters] = '\0';
 
     //stores each number of the date in the array date[]
     printf("Enter date in the format of 8 digits: ");
@@ -32,8 +34,8 @@ int main()
         scanf("%1d", p);
 
     //encrypts the message and prints it
-    encrypt(msg, num_characters, date);
-    printf("%s", msg);
+    encrypt(msg, enc_msg, date, 8);
+    printf("%s", enc_msg);
 
     return 0;
 }
@@ -52,29 +54,32 @@ int read_line(char* str, int n)
     return i; //number of characters stored
 }
 
-void encrypt(char* str, int length, int* date)
+void encrypt(char* message, char* encrypted_message, int* date, int n)
 {
-    char* p; //points to str character
-    int* q = date; //points to date character
+    char* p; //points to message character
+    int* q; //points to date character
+    char* s; //points to encrypted_message character
 
     //loops through each character is the string
-    for(p = str; p < str + length; p++)
+    for(p = message, q = date, s = encrypted_message; p < message + strlen(message); p++, s++)
     {
         if('a' <= *p && *p <= 'z') //character is lowercase
         {
-            *p = (((*p - 'a') + *q) % 26) + 'a';
+            *s = (((*p - 'a') + *q) % 26) + 'a';
         }
         else if('A' <= *p && *p <= 'Z') //character is uppercase
         {
-            *p = (((*p - 'A') + *q) % 26) + 'A';
+            *s = (((*p - 'A') + *q) % 26) + 'A';
         }
         else //character is not aplhabetical
+        {
+            *s = *p;
             continue;
-
+        }
         q++;
-        
+
         //returns to the start of date if at end
-        if(q - 8 == date)
-            q -= 8;
+        if(q - n == date)
+            q -= n;
     }
 }
