@@ -16,10 +16,10 @@ int main(int argc, char *argv[])
 {
     //invalid if only one argument
     if(argc == 1)
-        {
-            printf("Invalid number of arguments");
-            return 0;
-        }
+    {
+        printf("Invalid number of arguments");
+        return 0;
+    }
 
     char* ch;
     int len = strlen(argv[1]);
